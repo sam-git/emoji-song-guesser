@@ -1,12 +1,13 @@
 {
   "name": "emoji-song-guesser",
   "version": "0.1.0",
-  "homepage" : "http://sam-git.github.io/emoji-song-guesser",
+  "homepage": "http://sam-git.github.io/emoji-song-guesser",
   "private": true,
   "dependencies": {
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
-    "react-scripts": "1.0.13"
+    "react-scripts": "1.0.13",
+    "react-select": "^1.0.0-rc.10"
   },
   "scripts": {
     "start": "react-scripts start",
