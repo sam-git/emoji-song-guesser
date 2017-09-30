@@ -5,79 +5,49 @@ import Select from 'react-select';
 
 import qs from 'query-string';
 
-// var Select = require('react-select');
 import 'react-select/dist/react-select.css';
 
-var options = [
-    { value: 'one', label: 'One' },
-    { value: 'two', label: 'Two' }
-];
-
-// var qps = qs.stringify({
-//     method: 'track.search',
-//     track:
-//     api_key: "405d5c31c88edfb69ecb1e3e3e910e4e",
-//     format: "json",
-//     limit: 10,
-// });
-
-let headers = new Headers({
-    'Access-Control-Allow-Origin':'*',
-    'Content-Type': 'multipart/form-data'
-});
-
-const getOptions = (input) => {
+let _getOptions = (input) => {
     let params = qs.stringify({
         method: 'track.search',
         track: input,
         api_key: "405d5c31c88edfb69ecb1e3e3e910e4e",
         format: "json",
-        limit: 10,
+        limit: 6,
     });
-    return fetch(`http://ws.audioscrobbler.com/2.0/?${params}`, {method: 'GET', headers: headers})
+    return fetch(`http://ws.audioscrobbler.com/2.0/?${params}`)
         .then((response) => {
             return response.json();
         }).then((json) => {
             let x = formatResults(json);
-            console.log(x);
+            console.log(input);
+            console.log(JSON.stringify(x, null, '\t'));
             return {options: x};
         });
 };
 
+let getOptions = _getOptions;
+
 function formatResults(json) {
+    if (!json.results) {};
     let tracks = json.results.trackmatches.track;
-    console.log('b', tracks);
     return tracks.map(function(track){
+        if (track.mbid === '') track.mbid = Math.random();
         let newVar = {label: `${track.artist} - ${track.name}`, value: track.mbid};
         return newVar;
     });
 }
 
-// var myRequest = new Request(`http://ws.audioscrobbler.com/2.0/${qps}`, {method: 'POST', body: '{"foo":"bar"}'});
+function filterOption() {
+    return true;
+}
 
-// var getOptions = function(input, callback) {
-//     setTimeout(function() {
-//         callback(null, {
-//             options: [
-//                 { value: 'one', label: 'One' },
-//                 { value: 'two', label: 'Two' }
-//             ],
-//             // CAREFUL! Only set this to true when there are no more options,
-//             // or more specific queries will not be sent to the server.
-//             complete: true
-//         });
-//     }, 500);
-// };
+console.log('⚠️');
 
-
-// const getOptions = (input) => {
-//     return fetch(`/users/${input}.json`)
-//         .then((response) => {
-//             return response.json();
-//         }).then((json) => {
-//             return { options: json };
-//         });
-// }
+let songs = [
+    {clue:{__html:'I  👀 ⚠️'}, mbid:"67841d9d-7ce6-435f-8b34-1a27600018a6"},
+    {clue:{__html:`<code style={display: block}>⬛️ ⬛️ ⬛</code> <code style={display: block}>⬛️ 🔙🔙️ ⬛</code> <code style={display: block}>⬛️ ⬛️ ⬛</code>️`}, mbid:"dunno"}
+]
 
 class App extends Component {
   render() {
@@ -87,14 +57,13 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h2>Welcome to React</h2>
         </div>
-        <p className="App-intro">
-          {/*To get started, edit <code>src/App.js</code> and save to reload.*/}
-            I  👀 ⚠️
-        </p>
+        <p className="App-intro" dangerouslySetInnerHTML={songs[0].clue}></p>
 
           <Select.Async
             name="form-field-name"
             loadOptions={getOptions}
+            filterOption={filterOption}
+            value="one"
           />
 
 
@@ -104,3 +73,5 @@ class App extends Component {
 }
 
 export default App;
+
+
