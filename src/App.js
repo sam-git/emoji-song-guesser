@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import songs from './song.js';
 import Select from 'react-select';
 
 import qs from 'query-string';
